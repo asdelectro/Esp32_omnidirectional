@@ -1,0 +1,70 @@
+// Include PS3 Controller library
+#include <Ps3Controller.h>
+
+ 
+// Variables to hold LED states
+bool led1State = false;
+bool led2State = false;
+bool led3State = false;
+ 
+// Callback Function
+void notify() {
+ 
+  // Cross button - LED1 momentary control
+  if (Ps3.event.button_down.cross) {
+    Serial.println("Cross pressed");
+    led1State = true;
+   
+  }
+  
+   // Triangle Button - LED2 toggle control
+  if (Ps3.event.button_down.triangle) {
+    Serial.println("Triangle presssed");
+    led2State = !led2State;
+   
+  }
+ 
+  // Square Button - LED3 on
+  if (Ps3.event.button_down.square) {
+    Serial.println("Square pressed");
+    led3State = true;
+
+  }
+ 
+  // Circle Button - LED3 off
+  if (Ps3.event.button_down.circle) {
+    Serial.println("Circle pressed");
+    led3State = false;
+   
+  }
+}
+ 
+// On Connection function
+void onConnect() {
+  // Print to Serial Monitor
+  Serial.println("Connected.");
+}
+ 
+void setup() {
+ 
+  // Setup Serial Monitor for testing
+  Serial.begin(115200);
+ 
+  // Define Callback Function
+  Ps3.attach(notify);
+  // Define On Connection Function
+  Ps3.attachOnConnect(onConnect);
+  // Emulate console as specific MAC address (change as required)
+  Ps3.begin("08:d1:f9:e8:1d:f6");
+ 
+ 
+ 
+  // Print to Serial Monitor
+  Serial.println("Ready.");
+}
+ 
+void loop() {
+  if (!Ps3.isConnected())
+    return;
+  delay(2000);
+}
